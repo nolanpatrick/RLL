@@ -4,10 +4,14 @@
  * that may be used like a stack. It is designed for use in
  * the Raft interpreter, but may be used elsewhere.
  * 
+ * Implemented as a single-file library in the style of the 
+ * stb libraries: https://github.com/nothings/stb
+ * 
  * Current features:
  *   - Initialize (creates head link)
- *   - Push
- *   - Pop
+ *   - Push ------- LinkPush()
+ *   - Pop -------- LinkPop()
+ *   - Length ----- LinkLength()
  * 
  * Planned features:
  *   - Insert
@@ -30,9 +34,10 @@ struct _Node {
 };
 
 extern struct _Node Initialize(void);
-extern struct _Node * _walk(struct _Node * l);
+extern struct _Node * _walk(struct _Node * n);
 extern void LinkPush(struct _Node * n, int i);
 extern int LinkPop(struct _Node * n);
+extern int LinkLength(struct _Node * n);
 extern void PrintNodes(struct _Node * n);
 
 typedef struct _Node Link;
@@ -50,8 +55,8 @@ struct _Node Initialize(void) {
     return(to_init);
 }
 
-struct _Node * _walk(struct _Node * l) {
-    struct _Node * curr = l;
+struct _Node * _walk(struct _Node * n) {
+    struct _Node * curr = n;
     while (curr->ptr != NULL) {
         curr = curr->ptr;
     }
@@ -91,6 +96,17 @@ int LinkPop(struct _Node * n) {
 
     free(next); // After storing the contents of the last link, we can free its memory.
     return(m);
+}
+
+int LinkLength(struct _Node * n) {
+    int link_length = 0;
+
+    struct _Node * curr = n;
+    while (curr->ptr != NULL) {
+        curr = curr->ptr;
+        link_length++;
+    }
+    return(link_length);
 }
 
 void PrintNodes(struct _Node * n) {
