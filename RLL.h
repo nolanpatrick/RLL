@@ -8,14 +8,14 @@
  * stb libraries: https://github.com/nothings/stb
  * 
  * Current features:
- *   - Initialize (creates head link)
+ *   - Initialize - Initialize(void)
  *   - Push ------- LinkPush()
  *   - Pop -------- LinkPop()
  *   - Peek ------- LinkPeek()
+ *   - Insert ----- LinkInsert()
  *   - Length ----- LinkLength()
  * 
  * Planned features:
- *   - Insert
  *   - Delete
  *   - Maybe more in the future
  * 
@@ -34,13 +34,14 @@ struct _Node {
     struct _Node * ptr;
 };
 
-extern struct _Node Initialize(void);          // Initialize the 'head' node
-extern struct _Node * _walk(struct _Node * n); // Returns a pointer to the end node
-extern void LinkPush(struct _Node * n, int i); // Push (stack operation)
-extern int LinkPop(struct _Node * n);          // Pop (stack operation)
-extern int LinkLength(struct _Node * n);       // Returns length of linked list
-extern int LinkPeek(struct _Node * n);         // Returns value of end node
-extern void PrintNodes(struct _Node * n);      // Print attributes of all nodes
+extern struct _Node Initialize(void);                     // Initialize the 'head' node
+extern struct _Node * _walk(struct _Node * n);            // Returns a pointer to the end node
+extern void LinkPush(struct _Node * n, int d);            // Push (stack operation)
+extern int LinkPop(struct _Node * n);                     // Pop (stack operation)
+extern int LinkLength(struct _Node * n);                  // Returns length of linked list
+extern int LinkPeek(struct _Node * n);                    // Returns value of end node
+extern void LinkInsert(struct _Node * n, int d, int ind); // Insert a node at specified index
+extern void PrintNodes(struct _Node * n);                 // Print attributes of all nodes
 
 typedef struct _Node Link;
 
@@ -65,16 +66,16 @@ struct _Node * _walk(struct _Node * n) {
     return(curr);
 }
 
-void LinkPush(struct _Node * n, int i) {
+void LinkPush(struct _Node * n, int d) {
     // Push operation for using linked list like a stack
-    struct _Node * new__Node = malloc(sizeof(struct _Node));
-    new__Node->data = i;
-    new__Node->type = link;
-    new__Node->ptr = NULL;
+    struct _Node * new_node = malloc(sizeof(struct _Node));
+    new_node->data = d;
+    new_node->type = link;
+    new_node->ptr = NULL;
 
-    struct _Node * last__Node = _walk(n);
+    struct _Node * last_node = _walk(n);
 
-    last__Node->ptr = new__Node;
+    last_node->ptr = new_node;
 }
 
 int LinkPop(struct _Node * n) {
@@ -84,7 +85,7 @@ int LinkPop(struct _Node * n) {
 
     if (curr->ptr == NULL) {
         fprintf(stderr, "Error: Insufficient list contents for operation: pop\n");
-        return(0);
+        exit(1);
     } else {
         next = curr->ptr;
         while (next->ptr != NULL) {
@@ -114,6 +115,29 @@ int LinkLength(struct _Node * n) {
 int LinkPeek(struct _Node * n) {
     struct _Node * end = _walk(n);
     return(end->data);
+}
+
+void LinkInsert(struct _Node * n, int d, int ind) {
+    struct _Node * before = n;
+    if (ind > LinkLength(n)) {
+        fprintf(stderr, "Error: Insufficient list contents for operation: insert\n");
+        exit(1);
+    } else if (ind < 0) {
+        fprintf(stderr, "Error: Index must be greater than or equal to zero\n");
+        exit(1);
+    }
+    for (int i = 0; i < ind; i++) {
+        before = before->ptr;
+    }
+
+    struct _Node * after = before->ptr;
+
+    struct _Node * new_node = malloc(sizeof(struct _Node));
+    new_node->data = d;
+    new_node->type = link;
+    new_node->ptr = after;
+
+    before->ptr = new_node;
 }
 
 void PrintNodes(struct _Node * n) {
