@@ -19,7 +19,7 @@
  *   - Delete
  *   - Maybe more in the future
  * 
- * by Nolan Adams, 25 January 2022
+ * by Nolan Adams, 26 January 2022
 */
 
 #ifndef RLL_H_INCLUDED
@@ -51,6 +51,7 @@ typedef struct _Node Link;
 #define RLL_C_INCLUDED
 
 struct _Node Initialize(void) {
+    // Initialize empty list
     struct _Node to_init;
     to_init.data = 0;
     to_init.type = head;
@@ -59,6 +60,7 @@ struct _Node Initialize(void) {
 }
 
 struct _Node * _walk(struct _Node * n) {
+    // Returns pointer to last node in list
     struct _Node * curr = n;
     while (curr->ptr != NULL) {
         curr = curr->ptr;
@@ -102,6 +104,7 @@ int LinkPop(struct _Node * n) {
 }
 
 int LinkLength(struct _Node * n) {
+    // Get the current length of a list
     int link_length = 0;
 
     struct _Node * curr = n;
@@ -118,6 +121,7 @@ int LinkPeek(struct _Node * n) {
 }
 
 void LinkInsert(struct _Node * n, int d, int ind) {
+    // Insert a link at the specified index
     struct _Node * before = n;
     if (ind > LinkLength(n)) {
         fprintf(stderr, "Error: Insufficient list contents for operation: insert\n");
@@ -141,6 +145,7 @@ void LinkInsert(struct _Node * n, int d, int ind) {
 }
 
 void PrintNodes(struct _Node * n) {
+    // Print attributes of all nodes in list
     struct _Node * curr = n;
     while (curr != NULL) {
         printf("== Node == \n");
