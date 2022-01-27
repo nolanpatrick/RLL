@@ -11,6 +11,7 @@
  *   - Initialize (creates head link)
  *   - Push ------- LinkPush()
  *   - Pop -------- LinkPop()
+ *   - Peek ------- LinkPeek()
  *   - Length ----- LinkLength()
  * 
  * Planned features:
@@ -33,12 +34,13 @@ struct _Node {
     struct _Node * ptr;
 };
 
-extern struct _Node Initialize(void);
-extern struct _Node * _walk(struct _Node * n);
-extern void LinkPush(struct _Node * n, int i);
-extern int LinkPop(struct _Node * n);
-extern int LinkLength(struct _Node * n);
-extern void PrintNodes(struct _Node * n);
+extern struct _Node Initialize(void);          // Initialize the 'head' node
+extern struct _Node * _walk(struct _Node * n); // Returns a pointer to the end node
+extern void LinkPush(struct _Node * n, int i); // Push (stack operation)
+extern int LinkPop(struct _Node * n);          // Pop (stack operation)
+extern int LinkLength(struct _Node * n);       // Returns length of linked list
+extern int LinkPeek(struct _Node * n);         // Returns value of end node
+extern void PrintNodes(struct _Node * n);      // Print attributes of all nodes
 
 typedef struct _Node Link;
 
@@ -107,6 +109,11 @@ int LinkLength(struct _Node * n) {
         link_length++;
     }
     return(link_length);
+}
+
+int LinkPeek(struct _Node * n) {
+    struct _Node * end = _walk(n);
+    return(end->data);
 }
 
 void PrintNodes(struct _Node * n) {
