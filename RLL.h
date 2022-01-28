@@ -19,7 +19,9 @@
  *   - Delete
  *   - Maybe more in the future
  * 
- * by Nolan Adams, 26 January 2022
+ * by Nolan Adams
+ * 
+ * Last updated 26 January 2022
 */
 
 #ifndef RLL_H_INCLUDED
