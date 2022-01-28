@@ -102,6 +102,8 @@ extern struct _OpNode   *  OpPush(struct _FuncNode * n, Operations o, int i); //
 extern void Cleanup(struct _FuncNode * n); // Pop whole function and all nodes from main program
 extern void RetPop(struct _RetNode * n);   // Pop return stack entry
 
+extern void FuncPrint(struct _FuncNode * n);
+
 //extern void PrintPtrNodes(struct _PtrNode * n); // Print attributes of all nodes
 
 #endif // RLL_PTR_H_INCLUDED
@@ -236,6 +238,19 @@ void RetPop(struct _RetNode * n) {
     curr->ptr = NULL;
 
     free(next); // After storing the contents of the last link, we can free its memory.
+}
+
+void FuncPrint(struct _FuncNode * n) {
+    struct _FuncNode * curr = n;
+    while (curr->func != NULL) {
+        printf("_FuncNode:\n");
+        printf("  handle: %s\n", curr->handle);
+        printf("    type: %d\n", curr->type);
+        printf("    func: %p\n", curr->func);
+        printf("     ptr: %p\n", curr->ptr);
+        curr = curr->func;
+    }
+    return(curr);
 }
 
 #endif // RLL_PTR_C_INCLUDED
