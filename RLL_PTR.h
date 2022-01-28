@@ -250,7 +250,6 @@ void FuncPrint(struct _FuncNode * n) {
         printf("     ptr: %p\n", curr->ptr);
         curr = curr->func;
     }
-    return(curr);
 }
 
 #endif // RLL_PTR_C_INCLUDED
