@@ -83,7 +83,8 @@ struct _FuncNode {
 struct _RetNode {
     // Used for return stack (stores return addresses on each function call)
     Type type;
-    struct _OpNode * ptr;
+    struct _OpNode * ret;
+    struct _RetNode * ptr;
 };
 
 extern struct _FuncNode FuncInitialize(void);               // Initialize the 'head' node of function stack (beginning of program execution)
@@ -169,7 +170,7 @@ struct _FuncNode * FuncPush(struct _FuncNode * n, char h[]) {
     // Initialize head _OpNode beside _FuncNode
     struct _OpNode * op_head = malloc(sizeof(struct _OpNode));
     op_head->op = op_null;
-    op_head->data = NULL;
+    op_head->data = 0;
     op_head->ptr = NULL;
     op_head->type = head;
 
