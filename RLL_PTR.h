@@ -242,7 +242,7 @@ void RetPop(struct _RetNode * n) {
 
 void FuncPrint(struct _FuncNode * n) {
     struct _FuncNode * curr = n;
-    while (curr->func != NULL) {
+    while (curr != NULL) {
         printf("_FuncNode:\n");
         printf("  handle: %s\n", curr->handle);
         printf("    type: %d\n", curr->type);
