@@ -13,6 +13,7 @@
 
 typedef enum {
     op_null,
+    op_func,
     op_return,
 
     // Arithmetic
