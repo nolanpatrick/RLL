@@ -5,7 +5,7 @@
  * 
  * by Nolan Adams
  * 
- * Last updated 27 January 2022
+ * Last updated 29 January 2022
 */
 
 #ifndef RLL_PTR_H_INCLUDED
@@ -13,7 +13,10 @@
 
 typedef enum {
     op_null,
+
+    // Functions
     op_func,
+    op_func_decl,
     op_return,
 
     // Arithmetic
