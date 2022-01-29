@@ -20,6 +20,7 @@ typedef enum {
     op_func_decl,
     op_func_start,
     op_return,
+    op_func_call,
 
     // Arithmetic
     op_add,
