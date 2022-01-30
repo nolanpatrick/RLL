@@ -238,6 +238,7 @@ struct _OpNode * OpPushInt(struct _FuncNode * n, Operations o, int i) {
 struct _OpNode * OpPushStr(struct _FuncNode * n, Operations o, char * s) {
     // Push operation for operation chain within function
     struct _OpNode * new_OpNode = malloc(sizeof(struct _OpNode));
+    new_OpNode->data_s = malloc(strlen(s));
     strcpy(new_OpNode->data_s, s);
     new_OpNode->op = o;
     new_OpNode->ptr = NULL;
