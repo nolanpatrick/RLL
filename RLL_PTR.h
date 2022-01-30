@@ -75,10 +75,8 @@ struct _OpNode {
     // Used for sequence of program operations
     Type type;
     Operations op;
-    union {
-        int data_i;
-        char * data_s;
-    };
+    int data_i;
+    char * data_s;
     struct _OpNode * ptr;
 };
 
@@ -213,6 +211,7 @@ struct _OpNode * OpPush(struct _FuncNode * n, Operations o) {
     new_OpNode->data_i = 0;
     new_OpNode->op = o;
     new_OpNode->ptr = NULL;
+    new_OpNode->type = link;
 
     struct _OpNode * last_OpNode = _OpWalk(n);
 
@@ -227,6 +226,7 @@ struct _OpNode * OpPushInt(struct _FuncNode * n, Operations o, int i) {
     new_OpNode->data_i = i;
     new_OpNode->op = o;
     new_OpNode->ptr = NULL;
+    new_OpNode->type = link;
 
     struct _OpNode * last_OpNode = _OpWalk(n);
 
@@ -242,6 +242,7 @@ struct _OpNode * OpPushStr(struct _FuncNode * n, Operations o, char * s) {
     strcpy(new_OpNode->data_s, s);
     new_OpNode->op = o;
     new_OpNode->ptr = NULL;
+    new_OpNode->type = link;
 
     struct _OpNode * last_OpNode = _OpWalk(n);
 
@@ -289,21 +290,21 @@ void RetPop(struct _RetNode * n) {
 void MemMapPrint(struct _FuncNode * n) {
     struct _FuncNode * curr_FuncNode = n;
     while (curr_FuncNode != NULL) {
-        printf(" ***************** ");
-        printf(" *** _FuncNode ***\n");
-        printf("   handle: %s\n", curr_FuncNode->handle);
-        printf("     type: %s\n", curr_FuncNode->type ? "link" : "head");
-        printf("     func: %p\n", curr_FuncNode->func);
-        printf("      ptr: %p\n", curr_FuncNode->ptr);
+        printf("\n *** _FuncNode ***\n");
+        printf(" *  handle: %s\n", curr_FuncNode->handle);
+        printf(" *    type: %s\n", curr_FuncNode->type ? "link" : "head");
+        printf(" *    func: %p\n", curr_FuncNode->func);
+        printf(" *     ptr: %p\n", curr_FuncNode->ptr);
+        printf(" *****************\n");
 
         struct _OpNode * curr_OpNode = curr_FuncNode->ptr;
         while (curr_OpNode != NULL) {
-            printf("  _OpNode \n");
-            printf("     type: %s\n", curr_OpNode->type ? "link" : "head");
-            printf("       op: %d\n", curr_OpNode->op);
-            printf("   data_i: %d\n", curr_OpNode->data_i);
-            printf("   data_s: %s\n", curr_OpNode->data_s);
-            printf("      ptr: %p\n", curr_OpNode->ptr);
+            printf("\n           _OpNode: %p\n", curr_OpNode);
+            printf("              type: %s\n", curr_OpNode->type ? "link" : "head");
+            printf("                op: %d\n", curr_OpNode->op);
+            printf("            data_s: %s\n", curr_OpNode->data_s);
+            printf("            data_i: %d\n", curr_OpNode->data_i);
+            printf("               ptr: %p\n", curr_OpNode->ptr);
             curr_OpNode = curr_OpNode->ptr;
         }
         curr_FuncNode = curr_FuncNode->func;
