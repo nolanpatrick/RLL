@@ -75,7 +75,10 @@ struct _OpNode {
     // Used for sequence of program operations
     Type type;
     Operations op;
-    int data;
+    union {
+        int data_i;
+        char * data_s;
+    };
     struct _OpNode * ptr;
 };
 
@@ -104,7 +107,10 @@ extern struct _OpNode   * _OpWalk(struct _FuncNode * n);    // Returns a pointer
 
 extern struct _FuncNode *  FuncPush(struct _FuncNode * n, char h[]);          // Push (function stack)
 extern struct _RetNode  *  RetPush(struct _RetNode * n, struct _OpNode * r);  // Push (return stack)
-extern struct _OpNode   *  OpPush(struct _FuncNode * n, Operations o, int i); // Push (operation stack)
+
+extern struct _OpNode   *  OpPush(struct _FuncNode * n, Operations o);              // Push (operation stack)
+extern struct _OpNode   *  OpPushInt(struct _FuncNode * n, Operations o, int i);    // Push (operation stack)
+extern struct _OpNode   *  OpPushStr(struct _FuncNode * n, Operations o, char * s); // Push (operation stack)
 
 extern void Cleanup(struct _FuncNode * n); // Pop whole function and all nodes from main program
 extern void RetPop(struct _RetNode * n);   // Pop return stack entry
@@ -179,7 +185,7 @@ struct _FuncNode * FuncPush(struct _FuncNode * n, char h[]) {
     // Initialize head _OpNode beside _FuncNode
     struct _OpNode * op_head = malloc(sizeof(struct _OpNode));
     op_head->op = op_null;
-    op_head->data = 0;
+    op_head->data_i = 0;
     op_head->ptr = NULL;
     op_head->type = head;
 
@@ -201,14 +207,46 @@ struct _RetNode * RetPush(struct _RetNode * n, struct _OpNode * r) {
     return(new_RetNode);
 }
 
-struct _OpNode * OpPush(struct _FuncNode * n, Operations o, int i) {
+struct _OpNode * OpPush(struct _FuncNode * n, Operations o) {
     // Push operation for operation chain within function
     struct _OpNode * new_OpNode = malloc(sizeof(struct _OpNode));
-    new_OpNode->data = i;
+    new_OpNode->data_i = 0;
     new_OpNode->op = o;
     new_OpNode->ptr = NULL;
 
     struct _OpNode * last_OpNode = _OpWalk(n);
+
+    last_OpNode->ptr = new_OpNode;
+
+    return(new_OpNode);
+}
+
+struct _OpNode * OpPushInt(struct _FuncNode * n, Operations o, int i) {
+    // Push operation for operation chain within function
+    struct _OpNode * new_OpNode = malloc(sizeof(struct _OpNode));
+    new_OpNode->data_i = i;
+    new_OpNode->op = o;
+    new_OpNode->ptr = NULL;
+
+    struct _OpNode * last_OpNode = _OpWalk(n);
+
+    last_OpNode->ptr = new_OpNode;
+
+    return(new_OpNode);
+}
+
+struct _OpNode * OpPushStr(struct _FuncNode * n, Operations o, char * s) {
+    // Push operation for operation chain within function
+    struct _OpNode * new_OpNode = malloc(sizeof(struct _OpNode));
+    strcpy(new_OpNode->data_s, s);
+    new_OpNode->op = o;
+    new_OpNode->ptr = NULL;
+
+    struct _OpNode * last_OpNode = _OpWalk(n);
+
+    last_OpNode->ptr = new_OpNode;
+
+    return(new_OpNode);
 }
 
 void Cleanup(struct _FuncNode * n) {
