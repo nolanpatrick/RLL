@@ -115,7 +115,7 @@ extern struct _OpNode   *  OpPushStr(struct _FuncNode * n, Operations o, char * 
 extern void Cleanup(struct _FuncNode * n); // Pop whole function and all nodes from main program
 extern void RetPop(struct _RetNode * n);   // Pop return stack entry
 
-extern void FuncPrint(struct _FuncNode * n);
+extern void MemMapPrint(struct _FuncNode * n);
 
 //extern void PrintPtrNodes(struct _PtrNode * n); // Print attributes of all nodes
 
@@ -286,15 +286,27 @@ void RetPop(struct _RetNode * n) {
     free(next); // After storing the contents of the last link, we can free its memory.
 }
 
-void FuncPrint(struct _FuncNode * n) {
-    struct _FuncNode * curr = n;
-    while (curr != NULL) {
-        printf("_FuncNode:\n");
-        printf("  handle: %s\n", curr->handle);
-        printf("    type: %d\n", curr->type);
-        printf("    func: %p\n", curr->func);
-        printf("     ptr: %p\n", curr->ptr);
-        curr = curr->func;
+void MemMapPrint(struct _FuncNode * n) {
+    struct _FuncNode * curr_FuncNode = n;
+    while (curr_FuncNode != NULL) {
+        printf(" ***************** ");
+        printf(" *** _FuncNode ***\n");
+        printf("   handle: %s\n", curr_FuncNode->handle);
+        printf("     type: %s\n", curr_FuncNode->type ? "link" : "head");
+        printf("     func: %p\n", curr_FuncNode->func);
+        printf("      ptr: %p\n", curr_FuncNode->ptr);
+
+        struct _OpNode * curr_OpNode = curr_FuncNode->ptr;
+        while (curr_OpNode != NULL) {
+            printf("  _OpNode \n");
+            printf("     type: %s\n", curr_OpNode->type ? "link" : "head");
+            printf("       op: %d\n", curr_OpNode->op);
+            printf("   data_i: %d\n", curr_OpNode->data_i);
+            printf("   data_s: %s\n", curr_OpNode->data_s);
+            printf("      ptr: %p\n", curr_OpNode->ptr);
+            curr_OpNode = curr_OpNode->ptr;
+        }
+        curr_FuncNode = curr_FuncNode->func;
     }
 }
 
